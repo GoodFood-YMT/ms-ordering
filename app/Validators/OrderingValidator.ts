@@ -11,13 +11,4 @@ export default class OrderingValidator {
   public messages: CustomMessages = {
     'status.required': 'Le status est obligatoire',
   }
-
-  public validate() {
-    const data = this.ctx.request.only(['status'])
-    return this.ctx.request.validate({
-      schema: this.schema,
-      messages: this.messages,
-      data,
-    })
-  }
 }
