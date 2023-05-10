@@ -1,11 +1,12 @@
-import { rules, schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
+import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { OrdersStatus } from 'App/Enums/OrdersStatus'
 
-export default class OrderingValidator {
+export default class ProvidersOrdersValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    status: schema.string([rules.status()]),
+    status: schema.enum(Object.values(OrdersStatus)),
   })
 
   public messages: CustomMessages = {
