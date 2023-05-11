@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-ordering
+  labels:
+    app: ms-ordering
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-ordering
+  template:
+    metadata:
+      labels:
+        app: ms-ordering
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: ms-ordering-config
+            - secretRef:
+                name: ms-ordering-secret
+          image: matthieug76120/ms-ordering:1.0
+          name: ms-ordering
+          ports:
+            - containerPort: 3333
+          resources: {}
+      restartPolicy: Always

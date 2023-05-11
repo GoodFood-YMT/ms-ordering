@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-ordering-db-config
+  labels:
+    app: ms-ordering-db
+data:
+  POSTGRES_DB: ms-ordering
+  POSTGRES_USER: api
+  POSTGRES_PASSWORD: postgres123

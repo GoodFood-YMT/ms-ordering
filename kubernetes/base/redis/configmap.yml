@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-ordering-cache-config
+  labels:
+    app: ms-ordering-cache
+data: {}

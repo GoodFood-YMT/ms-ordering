@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-ordering-cache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-ordering-cache
+  template:
+    metadata:
+      labels:
+        app: ms-ordering-cache
+    spec:
+      containers:
+        - name: ms-ordering-cache
+          image: redis
+          ports:
+            - containerPort: 6379
+          envFrom:
+            - configMapRef:
+                name: ms-ordering-cache-config
+          resources: {}

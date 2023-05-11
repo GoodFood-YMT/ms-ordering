@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ms-ordering-db-persistent-volume
+  labels:
+    type: local
+    app: ms-ordering-db
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: '/mnt/volumes/ms-ordering/db'

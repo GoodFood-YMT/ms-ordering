@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-ordering-config
+  labels:
+    app: ms-ordering
+data:
+  PORT: '3333'
+  HOST: '0.0.0.0'
+  NODE_ENV: 'production'
+  DRIVE_DISK: 'local'
+  DB_CONNECTION: 'pg'
+  PG_HOST: 'ms-ordering-db'
+  PG_PORT: '5432'
+  PG_USER: 'api'
+  PG_PASSWORD: 'postgres123'
+  PG_DB_NAME: 'ms-ordering'
+  REDIS_CONNECTION: 'local'
+  REDIS_HOST: 'ms-ordering-cache'
+  REDIS_PORT: '6379'

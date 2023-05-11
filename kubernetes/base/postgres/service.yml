@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-ordering-db
+  labels:
+    app: ms-ordering-db
+spec:
+  type: NodePort
+  ports:
+    - port: 5432
+  selector:
+    app: ms-ordering-db
