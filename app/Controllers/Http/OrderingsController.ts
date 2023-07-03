@@ -2,7 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Orders from 'App/Models/Orders'
 import OrdersValidator from 'App/Validators/OrdersValidator'
 
-export default class OrderssController {
+export default class OrderingsController {
   public async index({ request, response }: HttpContextContract) {
     const page = request.input('page', 1)
     const limit = 10

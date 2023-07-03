@@ -20,9 +20,20 @@ spec:
                 name: ms-ordering-config
             - secretRef:
                 name: ms-ordering-secret
-          image: matthieug76120/ms-ordering:1.0
+          image: matthieug76120/ms-ordering:1.1
           name: ms-ordering
+          command: ['/bin/sh']
+          args: ['-c', 'node ace migration:run --force;node ace db:seed;dumb-init node server.js']
           ports:
             - containerPort: 3333
           resources: {}
+      initContainers:
+        - name: check-db-ready
+          image: postgres:9.6.5
+          command:
+            [
+              'sh',
+              '-c',
+              'until pg_isready -h ms-ordering-db -p 5432; do echo waiting for database; sleep 2; done;',
+            ]
       restartPolicy: Always
