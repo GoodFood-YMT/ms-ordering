@@ -15,10 +15,3 @@ spec:
                 name: ms-ordering
                 port:
                   number: 3333
-          - pathType: Prefix
-            path: /providerOrders
-            backend:
-              service:
-                name: ms-ordering
-                port:
-                  number: 3333
