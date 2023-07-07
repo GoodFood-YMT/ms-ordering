@@ -3,19 +3,19 @@ import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class IngredientsProvidersOrder extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: string
 
   @column()
-  public quantite: number
+  public quantite: string
 
   @column()
-  public provider_id: number
+  public provider_id: string
 
   @column()
-  public order_id: number
+  public order_id: string
 
   @column()
-  public ingredient_id: number
+  public ingredient_id: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
