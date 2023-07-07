@@ -9,6 +9,7 @@ export default class extends BaseSchema {
       table.string('status').notNullable()
       table.string('user_id').notNullable()
       table.string('restaurant_id').notNullable()
+      table.string('delivery_id')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })

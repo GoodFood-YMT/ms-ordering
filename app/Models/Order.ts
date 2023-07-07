@@ -15,6 +15,9 @@ export default class Order extends BaseModel {
   @column()
   public restaurantId: string
 
+  @column()
+  public deliveryId: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
