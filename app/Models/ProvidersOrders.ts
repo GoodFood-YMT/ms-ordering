@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeCreate, column } from '@ioc:Adonis/Lucid/Orm'
+import { cuid } from '@ioc:Adonis/Core/Helpers'
 
 export default class ProvidersOrders extends BaseModel {
   @column({ isPrimary: true })
@@ -12,8 +13,13 @@ export default class ProvidersOrders extends BaseModel {
   public createdAt: DateTime
 
   @column()
-  public provider_id: string
+  public providerId: string
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @beforeCreate()
+  public static async setId(providersOrders: ProvidersOrders) {
+    providersOrders.id = cuid()
+  }
 }

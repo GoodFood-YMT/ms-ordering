@@ -20,7 +20,7 @@ spec:
                 name: ms-ordering-config
             - secretRef:
                 name: ms-ordering-secret
-          image: matthieug76120/ms-ordering:latest
+          image: matthieug76120/ms-ordering:1.2
           name: ms-ordering
           command: ['/bin/sh']
           args: ['-c', 'node ace migration:run --force;node ace db:seed;dumb-init node server.js']
