@@ -7,6 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.string('id').primary()
       table.string('status').notNullable()
+      table.decimal('totalPrice').notNullable()
       table.string('user_id').notNullable()
       table.string('restaurant_id').notNullable()
       table.string('delivery_id')

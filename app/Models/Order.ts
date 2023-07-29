@@ -10,6 +10,9 @@ export default class Order extends BaseModel {
   public status: string //'PENDING' | 'PAID' | 'UNPAID'
 
   @column()
+  public totalPrice: number  
+
+  @column()
   public userId: string
 
   @column()
