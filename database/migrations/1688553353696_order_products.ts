@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.string('id').primary()
       table.integer('quantity').notNullable()
       table.string('product_id').notNullable()
-      table.string('order_id').notNullable()
+      table.foreign('order_id').references('id').inTable('orders').onDelete('CASCADE')
     })
   }
 
