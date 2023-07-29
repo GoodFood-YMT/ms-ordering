@@ -3,7 +3,6 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.get('/orders', 'OrdersController.index') //getall
 Route.post('/orders', 'OrdersController.store') //create
 Route.get('/orders/:id', 'OrdersController.show') //getbyid
-Route.patch('/orders/:id', 'OrdersController.update') //update
 
 Route.get('/providers/orders', 'ProvidersOrdersController.index') //getall
 Route.post('/providers/orders', 'ProvidersOrdersController.store') //create

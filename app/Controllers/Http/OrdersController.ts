@@ -20,12 +20,4 @@ export default class OrderingsController {
     const order = await Order.findOrFail(params.id)
     return response.status(200).json(order)
   }
-
-  public async update({ params, request, response }: HttpContextContract) {
-    const data = await request.validate(OrdersValidator)
-    const order = await Order.findOrFail(params.id)
-    order.status = data.status
-    await order.save()
-    return response.status(200).json(order)
-  }
 }
