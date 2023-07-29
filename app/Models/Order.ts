@@ -14,6 +14,9 @@ export default class Order extends BaseModel {
 
   @column()
   public userId: string
+  
+  @column()
+  public addressId: string
 
   @column()
   public restaurantId: string
