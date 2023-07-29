@@ -6,7 +6,8 @@ export default class OrderingsController {
   public async index({ request, response }: HttpContextContract) {
     const page = request.input('page', 1)
     const limit = 10
-    const order = await Order.query().paginate(page, limit)
+    const user_id = request.input('UserID')
+    const order = await Order.query().where('user_id', user_id).paginate(page, limit)
     return response.status(200).json(order)
   }
 
