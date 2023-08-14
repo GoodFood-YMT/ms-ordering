@@ -5,7 +5,6 @@ import {
   afterCreate,
   afterSave,
   beforeCreate,
-  beforeSave,
   column,
   hasMany,
 } from '@ioc:Adonis/Lucid/Orm'
