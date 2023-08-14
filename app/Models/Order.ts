@@ -3,6 +3,7 @@ import {
   BaseModel,
   HasMany,
   afterCreate,
+  afterSave,
   beforeCreate,
   beforeSave,
   column,
@@ -78,24 +79,21 @@ export default class Order extends BaseModel {
     )
   }
 
-  @beforeSave()
-  public static async setPreviousStatus(order: Order) {
-    order.previousStatus = order.status
-    order.save()
-  }
+  @afterSave()
+  public static async deliveryTunnel(order: Order) {
+    if (order.previousStatus !== order.status && order.status === OrdersStatus.PAID) {
+      Rabbit.assertQueue('delivery.create')
+      Rabbit.sendToQueue(
+        'delivery.create',
+        JSON.stringify({
+          orderId: order.id,
+          addressId: order.addressId,
+          restaurantId: order.restaurantId,
+        })
+      )
 
-  // @afterSave()
-  // public static async deliveryTunnel(order: Order) {
-  //   if (order.previousStatus !== order.status && order.status === OrdersStatus.PAID) {
-  //     Rabbit.assertQueue('delivery.create')
-  //     Rabbit.sendToQueue(
-  //       'delivery.create',
-  //       JSON.stringify({
-  //         orderId: order.id,
-  //         addressId: order.addressId,
-  //         restaurantId: order.restaurantId,
-  //       })
-  //     )
-  //   }
-  // }
+      order.previousStatus = order.status
+      order.save()
+    }
+  }
 }
