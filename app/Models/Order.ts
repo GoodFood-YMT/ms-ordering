@@ -1,5 +1,12 @@
 import { DateTime } from 'luxon'
-import { BaseModel, HasMany, beforeCreate, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  HasMany,
+  afterCreate,
+  beforeCreate,
+  column,
+  hasMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import { cuid } from '@ioc:Adonis/Core/Helpers'
 import OrderProducts from 'App/Models/OrderProducts'
 import { OrdersStatus } from 'App/Enums/OrdersStatus'
@@ -46,13 +53,13 @@ export default class Order extends BaseModel {
     order.id = cuid()
   }
 
-  // @afterCreate()
-  // public static async paymentTunnel(order: Order) {
-  //   setTimeout(() => {
-  //     order.status = OrdersStatus.PAID
-  //     order.save()
-  //   }, 5000)
-  // }
+  @afterCreate()
+  public static async paymentTunnel(order: Order) {
+    setTimeout(() => {
+      order.status = OrdersStatus.PAID
+      order.save()
+    }, 5000)
+  }
 
   // @afterCreate()
   // public static async publishMarketing(order: Order) {

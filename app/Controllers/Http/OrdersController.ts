@@ -52,11 +52,8 @@ export default class OrdersController {
 
     const products: { id: string; quantity: number; price: number; restaurantId: string }[] = []
 
-    console.log('before products')
     for (const product of data.products) {
-      console.log('1', product)
       const productData = await CatalogApi.getProduct(product.productId)
-      console.log('2', productData)
       products.push({
         id: product.productId,
         quantity: product.quantity,
@@ -64,7 +61,6 @@ export default class OrdersController {
         restaurantId: productData.restaurantId,
       })
     }
-    console.log('after products')
 
     // check if all products come from the same restaurant
     for (const product of products) {
@@ -72,14 +68,12 @@ export default class OrdersController {
         return response.status(400).json({ message: 'Products must come from the same restaurant' })
       }
     }
-    console.log('after restaurant check')
 
     // calculate total price
     let totalPrice = 0
     for (const product of products) {
       totalPrice += product.price * product.quantity
     }
-    console.log('after total price')
 
     const order = await Order.create({
       userId,
@@ -87,7 +81,6 @@ export default class OrdersController {
       restaurantId: products[0].restaurantId,
       totalPrice,
     })
-    console.log('after order')
 
     for (const product of products) {
       await order.related('products').create({
@@ -95,7 +88,6 @@ export default class OrdersController {
         quantity: product.quantity,
       })
     }
-    console.log('after products')
 
     return response.status(200).json(order)
   }
