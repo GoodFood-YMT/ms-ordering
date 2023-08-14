@@ -1,10 +1,8 @@
-import { BaseModel, beforeCreate, column, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
-import { cuid } from '@ioc:Adonis/Core/Helpers'
-import Order from './Order'
+import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class OrderProducts extends BaseModel {
   @column({ isPrimary: true })
-  public id: string
+  public id: number
 
   @column()
   public quantity: number
@@ -12,12 +10,6 @@ export default class OrderProducts extends BaseModel {
   @column()
   public productId: string
 
-  @hasMany(() => Order)
-  public orderId: HasMany<typeof Order>
-  
-
-  @beforeCreate()
-  public static async setId(OrderProducts: OrderProducts) {
-    OrderProducts.id = cuid()
-  }
+  @column()
+  public orderId: string
 }

@@ -5,10 +5,10 @@ export default class extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.string('id').primary()
-      table.integer('quantity').notNullable()
+      table.increments('id')
       table.string('product_id').notNullable()
       table.foreign('order_id').references('id').inTable('orders').onDelete('CASCADE')
+      table.integer('quantity').notNullable()
     })
   }
 
