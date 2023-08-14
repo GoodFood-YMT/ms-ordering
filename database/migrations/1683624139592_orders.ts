@@ -8,6 +8,10 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.string('id').primary()
       table.enum('status', Object.values(OrdersStatus)).defaultTo(OrdersStatus.UNPAID).notNullable()
+      table
+        .enum('previous_status', Object.values(OrdersStatus))
+        .defaultTo(OrdersStatus.UNPAID)
+        .notNullable()
       table.decimal('total_price').notNullable()
       table.string('user_id').notNullable()
       table.string('address_id').notNullable()

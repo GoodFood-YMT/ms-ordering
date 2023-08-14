@@ -3,17 +3,23 @@ import {
   BaseModel,
   HasMany,
   afterCreate,
+  afterSave,
   beforeCreate,
+  beforeSave,
   column,
   hasMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import { cuid } from '@ioc:Adonis/Core/Helpers'
 import OrderProducts from 'App/Models/OrderProducts'
 import { OrdersStatus } from 'App/Enums/OrdersStatus'
+import Rabbit from '@ioc:Adonis/Addons/Rabbit'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true })
   public id: string
+
+  @column()
+  public previousStatus: OrdersStatus
 
   @column()
   public status: OrdersStatus
@@ -56,5 +62,26 @@ export default class Order extends BaseModel {
       order.status = OrdersStatus.PAID
       order.save()
     }, 5000)
+  }
+
+  @beforeSave()
+  public static async setPreviousStatus(order: Order) {
+    order.previousStatus = order.status
+    order.save()
+  }
+
+  @afterSave()
+  public static async deliveryTunnel(order: Order) {
+    if (order.previousStatus !== order.status && order.status === OrdersStatus.PAID) {
+      Rabbit.assertQueue('delivery.create')
+      Rabbit.sendToQueue(
+        'delivery.create',
+        JSON.stringify({
+          orderId: order.id,
+          addressId: order.addressId,
+          restaurantId: order.restaurantId,
+        })
+      )
+    }
   }
 }
