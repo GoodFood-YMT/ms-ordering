@@ -21,7 +21,8 @@
       "environment": [
         "web"
       ]
-    }
+    },
+    "./start/rabbit"
   ],
   "providers": [
     "./providers/AppProvider",
