@@ -2,13 +2,14 @@ import { DateTime } from 'luxon'
 import { BaseModel, HasMany, beforeCreate, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { cuid } from '@ioc:Adonis/Core/Helpers'
 import OrderProducts from 'App/Models/OrderProducts'
+import { OrdersStatus } from 'App/Enums/OrdersStatus'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true })
   public id: string
 
   @column()
-  public status: string //'PENDING' | 'PAID' | 'UNPAID'
+  public status: OrdersStatus
 
   @column()
   public totalPrice: number

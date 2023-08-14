@@ -1,5 +1,5 @@
-export const OrdersStatus = {
-  PENDING: 'PENDING',
-  PAID: 'PAID',
-  UNPAID: 'UNPAID',
-} as const
+export enum OrdersStatus {
+  PENDING = 'PENDING',
+  PAID = 'PAID',
+  UNPAID = 'UNPAID',
+}
