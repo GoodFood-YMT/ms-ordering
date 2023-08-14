@@ -1,18 +1,8 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  HasMany,
-  afterCreate,
-  afterSave,
-  beforeCreate,
-  beforeSave,
-  column,
-  hasMany,
-} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, beforeCreate, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { cuid } from '@ioc:Adonis/Core/Helpers'
 import OrderProducts from 'App/Models/OrderProducts'
 import { OrdersStatus } from 'App/Enums/OrdersStatus'
-import Rabbit from '@ioc:Adonis/Addons/Rabbit'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true })
