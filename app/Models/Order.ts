@@ -4,6 +4,7 @@ import {
   HasMany,
   afterCreate,
   beforeCreate,
+  beforeSave,
   column,
   hasMany,
 } from '@ioc:Adonis/Lucid/Orm'
@@ -77,11 +78,11 @@ export default class Order extends BaseModel {
     )
   }
 
-  // @beforeSave()
-  // public static async setPreviousStatus(order: Order) {
-  //   order.previousStatus = order.status
-  //   order.save()
-  // }
+  @beforeSave()
+  public static async setPreviousStatus(order: Order) {
+    order.previousStatus = order.status
+    order.save()
+  }
 
   // @afterSave()
   // public static async deliveryTunnel(order: Order) {
