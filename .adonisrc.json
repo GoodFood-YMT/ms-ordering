@@ -26,7 +26,8 @@
   "providers": [
     "./providers/AppProvider",
     "@adonisjs/core",
-    "@adonisjs/lucid"
+    "@adonisjs/lucid",
+    "adonis-rabbit"
   ],
   "aceProviders": [
     "@adonisjs/repl"
