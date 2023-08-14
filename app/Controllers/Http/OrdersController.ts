@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import CatalogApi from 'App/Api/CatalogApi'
 import Order from 'App/Models/Order'
 import OrdersValidator from 'App/Validators/OrdersValidator'
 
@@ -37,8 +38,49 @@ export default class OrdersController {
   }
 
   public async store({ request, response }: HttpContextContract) {
+    const userId = request.header('UserID')
+
+    if (!userId) {
+      throw new Error('User not found')
+    }
+
     const data = await request.validate(OrdersValidator)
-    const order = await Order.create(data)
+
+    if (data.products.length === 0) {
+      return response.status(400).json({ message: 'You must have at least one product' })
+    }
+
+    const products: { id: string; quantity: number; price: number; restaurantId: string }[] = []
+
+    for (const product of data.products) {
+      const productData = await CatalogApi.getProduct(product.productId)
+      products.push({
+        id: product.productId,
+        quantity: product.quantity,
+        price: productData.price,
+        restaurantId: productData.restaurantId,
+      })
+    }
+
+    // check if all products come from the same restaurant
+    for (const product of products) {
+      if (product.restaurantId !== products[0].restaurantId) {
+        return response.status(400).json({ message: 'Products must come from the same restaurant' })
+      }
+    }
+
+    // calculate total price
+    let totalPrice = products.reduce((acc, product) => {
+      return acc + product.price * product.quantity
+    }, 0)
+
+    const order = await Order.create({
+      userId,
+      addressId: data.addressId,
+      restaurantId: products[0].restaurantId,
+      totalPrice,
+    })
+
     return response.status(200).json(order)
   }
 
