@@ -64,6 +64,21 @@ export default class Order extends BaseModel {
     }, 5000)
   }
 
+  @afterCreate()
+  public static async publishMarketing(order: Order) {
+    Rabbit.assertQueue('marketing.order.created')
+    Rabbit.sendToQueue(
+      'marketing.order.created',
+      JSON.stringify({
+        orderId: order.id,
+        totalPrice: order.totalPrice,
+        userId: order.userId,
+        restaurantId: order.restaurantId,
+        createdAt: order.createdAt,
+      })
+    )
+  }
+
   @beforeSave()
   public static async setPreviousStatus(order: Order) {
     order.previousStatus = order.status
