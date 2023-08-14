@@ -4,10 +4,16 @@ import OrdersValidator from 'App/Validators/OrdersValidator'
 
 export default class OrderingsController {
   public async index({ request, response }: HttpContextContract) {
+    const userId = request.header('UserID')
+
+    if (!userId) {
+      throw new Error('User not found')
+    }
+
     const page = request.input('page', 1)
     const limit = 10
-    const user_id = request.input('UserID')
-    const order = await Order.query().where('user_id', user_id).paginate(page, limit)
+
+    const order = await Order.query().where('user_id', userId).paginate(page, limit)
     return response.status(200).json(order)
   }
 
@@ -17,8 +23,29 @@ export default class OrderingsController {
     return response.status(200).json(order)
   }
 
-  public async show({ params, response }: HttpContextContract) {
+  public async show({ request, params, response }: HttpContextContract) {
+    const userId = request.header('UserID')
+    const role = request.header('Role')
+    const restaurantId = request.header('RestaurantID')
+
+    if (!userId) {
+      throw new Error('User not found')
+    }
+
+    if (!role) {
+      throw new Error('Role not found')
+    }
+
     const order = await Order.findOrFail(params.id)
-    return response.status(200).json(order)
+
+    if (
+      order.userId === userId ||
+      role === 'admin' ||
+      ((role === 'manager' || role === 'deliverer') && restaurantId === order.restaurantId)
+    ) {
+      return response.status(200).json(order)
+    }
+
+    return response.status(401).json({ message: 'Unauthorized' })
   }
 }
