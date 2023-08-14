@@ -8,6 +8,6 @@ export default class CatalogApi {
     restaurantId: string
   }> {
     const response = await fetch(`${this.ENDPOINT}/products/${id}`)
-    return (await response.json()) as { price: number; restaurantId: string }
+    return response.json() as Promise<{ price: number; restaurantId: string }>
   }
 }
