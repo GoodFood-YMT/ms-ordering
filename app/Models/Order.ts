@@ -10,6 +10,7 @@ import {
 import { cuid } from '@ioc:Adonis/Core/Helpers'
 import OrderProducts from 'App/Models/OrderProducts'
 import { OrdersStatus } from 'App/Enums/OrdersStatus'
+import Rabbit from '@ioc:Adonis/Addons/Rabbit'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true })
@@ -61,20 +62,20 @@ export default class Order extends BaseModel {
     }, 5000)
   }
 
-  // @afterCreate()
-  // public static async publishMarketing(order: Order) {
-  //   Rabbit.assertQueue('marketing.order.created')
-  //   Rabbit.sendToQueue(
-  //     'marketing.order.created',
-  //     JSON.stringify({
-  //       orderId: order.id,
-  //       totalPrice: order.totalPrice,
-  //       userId: order.userId,
-  //       restaurantId: order.restaurantId,
-  //       createdAt: order.createdAt,
-  //     })
-  //   )
-  // }
+  @afterCreate()
+  public static async publishMarketing(order: Order) {
+    Rabbit.assertQueue('marketing.order.created')
+    Rabbit.sendToQueue(
+      'marketing.order.created',
+      JSON.stringify({
+        orderId: order.id,
+        totalPrice: order.totalPrice,
+        userId: order.userId,
+        restaurantId: order.restaurantId,
+        createdAt: order.createdAt,
+      })
+    )
+  }
 
   // @beforeSave()
   // public static async setPreviousStatus(order: Order) {

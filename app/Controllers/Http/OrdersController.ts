@@ -14,7 +14,10 @@ export default class OrdersController {
     const page = request.input('page', 1)
     const limit = 10
 
-    const order = await Order.query().where('user_id', userId).paginate(page, limit)
+    const order = await Order.query()
+      .where('user_id', userId)
+      .orderBy('created_at', 'desc')
+      .paginate(page, limit)
     return response.status(200).json(order)
   }
 
@@ -33,7 +36,10 @@ export default class OrdersController {
     const page = request.input('page', 1)
     const limit = 10
 
-    const order = await Order.query().where('restaurant_id', restaurantId).paginate(page, limit)
+    const order = await Order.query()
+      .where('restaurant_id', restaurantId)
+      .orderBy('created_at', 'desc')
+      .paginate(page, limit)
     return response.status(200).json(order)
   }
 
