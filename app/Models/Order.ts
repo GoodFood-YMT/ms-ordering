@@ -56,13 +56,13 @@ export default class Order extends BaseModel {
     order.id = cuid()
   }
 
-  @afterCreate()
-  public static async paymentTunnel(order: Order) {
-    setTimeout(() => {
-      order.status = OrdersStatus.PAID
-      order.save()
-    }, 5000)
-  }
+  // @afterCreate()
+  // public static async paymentTunnel(order: Order) {
+  //   setTimeout(() => {
+  //     order.status = OrdersStatus.PAID
+  //     order.save()
+  //   }, 5000)
+  // }
 
   @afterCreate()
   public static async publishMarketing(order: Order) {
