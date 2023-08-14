@@ -1,10 +1,12 @@
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/orders', 'OrdersController.index') //getall
-Route.post('/orders', 'OrdersController.store') //create
-Route.get('/orders/:id', 'OrdersController.show') //getbyid
+Route.group(() => {
+  Route.get('/orders', 'OrdersController.index')
+  Route.post('/orders', 'OrdersController.store')
+  Route.get('/orders/:id', 'OrdersController.show')
 
-Route.get('/providers/orders', 'ProvidersOrdersController.index') //getall
-Route.post('/providers/orders', 'ProvidersOrdersController.store') //create
-Route.get('/providers/orders/:id', 'ProvidersOrdersController.show') //getbyid
-Route.patch('/providers/orders/:id', 'ProvidersOrdersController.update') //update
+  Route.get('/providers/orders', 'ProvidersOrdersController.index')
+  Route.post('/providers/orders', 'ProvidersOrdersController.store')
+  Route.get('/providers/orders/:id', 'ProvidersOrdersController.show')
+  Route.patch('/providers/orders/:id', 'ProvidersOrdersController.update')
+}).prefix('/ordering')
