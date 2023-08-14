@@ -52,8 +52,11 @@ export default class OrdersController {
 
     const products: { id: string; quantity: number; price: number; restaurantId: string }[] = []
 
+    console.log('before products')
     for (const product of data.products) {
+      console.log('1', product)
       const productData = await CatalogApi.getProduct(product.productId)
+      console.log('2', productData)
       products.push({
         id: product.productId,
         quantity: product.quantity,
@@ -61,6 +64,7 @@ export default class OrdersController {
         restaurantId: productData.restaurantId,
       })
     }
+    console.log('after products')
 
     // check if all products come from the same restaurant
     for (const product of products) {
@@ -98,6 +102,7 @@ export default class OrdersController {
     }
 
     const order = await Order.findOrFail(params.id)
+    await order.load('products')
 
     if (
       order.userId === userId ||
