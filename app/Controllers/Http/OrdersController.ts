@@ -2,7 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Order from 'App/Models/Order'
 import OrdersValidator from 'App/Validators/OrdersValidator'
 
-export default class OrderingsController {
+export default class OrdersController {
   public async index({ request, response }: HttpContextContract) {
     const userId = request.header('UserID')
 
@@ -14,6 +14,25 @@ export default class OrderingsController {
     const limit = 10
 
     const order = await Order.query().where('user_id', userId).paginate(page, limit)
+    return response.status(200).json(order)
+  }
+
+  public async getManagerOrders({ request, response }: HttpContextContract) {
+    const userId = request.header('UserID')
+    const restaurantId = request.header('RestaurantID')
+
+    if (!userId) {
+      throw new Error('User not found')
+    }
+
+    if (!restaurantId) {
+      throw new Error('Restaurant not found')
+    }
+
+    const page = request.input('page', 1)
+    const limit = 10
+
+    const order = await Order.query().where('restaurant_id', restaurantId).paginate(page, limit)
     return response.status(200).json(order)
   }
 

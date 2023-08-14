@@ -4,6 +4,7 @@ Route.group(() => {
   Route.get('/orders', 'OrdersController.index')
   Route.post('/orders', 'OrdersController.store')
   Route.get('/orders/:id', 'OrdersController.show')
+  Route.get('/manager/orders', 'OrdersController.getManagerOrders')
 
   Route.get('/providers/orders', 'ProvidersOrdersController.index')
   Route.post('/providers/orders', 'ProvidersOrdersController.store')
