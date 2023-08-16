@@ -65,8 +65,8 @@ export default class Order extends BaseModel {
 
   @afterCreate()
   public static async publishMarketing(order: Order) {
-    Rabbit.assertQueue('marketing.order.created')
-    Rabbit.sendToQueue(
+    await Rabbit.assertQueue('marketing.order.created')
+    await Rabbit.sendToQueue(
       'marketing.order.created',
       JSON.stringify({
         orderId: order.id,
@@ -81,9 +81,10 @@ export default class Order extends BaseModel {
   @afterSave()
   public static async deliveryTunnel(order: Order) {
     console.log(order.previousStatus, order.status)
+    console.log(order.previousStatus !== order.status, order.status === OrdersStatus.PAID)
     if (order.previousStatus !== order.status && order.status === OrdersStatus.PAID) {
-      Rabbit.assertQueue('delivery.create')
-      Rabbit.sendToQueue(
+      await Rabbit.assertQueue('delivery.create')
+      await Rabbit.sendToQueue(
         'delivery.create',
         JSON.stringify({
           orderId: order.id,
