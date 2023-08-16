@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CatalogApi from 'App/Api/CatalogApi'
+import { OrdersStatus } from 'App/Enums/OrdersStatus'
 import Order from 'App/Models/Order'
 import OrdersValidator from 'App/Validators/OrdersValidator'
 
@@ -86,6 +87,8 @@ export default class OrdersController {
       addressId: data.addressId,
       restaurantId: products[0].restaurantId,
       totalPrice,
+      status: OrdersStatus.UNPAID,
+      previousStatus: OrdersStatus.UNPAID,
     })
 
     for (const product of products) {
