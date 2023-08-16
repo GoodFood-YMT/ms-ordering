@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import AddressesApi from 'App/Api/AddressesApi'
 import CatalogApi from 'App/Api/CatalogApi'
 import { OrdersStatus } from 'App/Enums/OrdersStatus'
 import Order from 'App/Models/Order'
@@ -55,6 +56,12 @@ export default class OrdersController {
 
     if (data.products.length === 0) {
       return response.status(400).json({ message: 'You must have at least one product' })
+    }
+
+    // validate address
+    const address = await AddressesApi.getAddress(userId, data.addressId)
+    if (!address) {
+      return response.status(400).json({ message: 'Address not found' })
     }
 
     const products: { id: string; quantity: number; price: number; restaurantId: string }[] = []
