@@ -3,8 +3,8 @@ import { validator, schema } from '@ioc:Adonis/Core/Validator'
 import Order from 'App/Models/Order'
 
 const deliveryCreatedSchema = schema.create({
-  orderId: schema.string(),
-  deliveryId: schema.string(),
+  orderId: schema.string({}, []),
+  deliveryId: schema.string({}, []),
 })
 
 async function listenDeliveryCreated() {
@@ -16,7 +16,7 @@ async function listenDeliveryCreated() {
     try {
       const payload = await validator.validate({
         schema: deliveryCreatedSchema,
-        data: JSON.parse(message.content),
+        data: JSON.parse(message.content.toString()),
       })
 
       const order = await Order.findBy('id', payload.orderId)
@@ -26,7 +26,7 @@ async function listenDeliveryCreated() {
         order.save()
       }
     } catch (e) {
-      console.log('Delivery created payload not valid', e.message)
+      console.log('Delivery created payload not valid', e.message, message.content.toString())
     }
 
     message.ack()

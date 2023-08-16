@@ -80,8 +80,6 @@ export default class Order extends BaseModel {
 
   @afterSave()
   public static async deliveryTunnel(order: Order) {
-    console.log(order.previousStatus, order.status)
-    console.log(order.previousStatus !== order.status, order.status === OrdersStatus.PAID)
     if (order.previousStatus !== order.status && order.status === OrdersStatus.PAID) {
       await Rabbit.assertQueue('delivery.create')
       await Rabbit.sendToQueue(
