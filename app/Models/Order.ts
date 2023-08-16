@@ -60,7 +60,7 @@ export default class Order extends BaseModel {
     setTimeout(() => {
       order.status = OrdersStatus.PAID
       order.save()
-    }, 5000)
+    }, 10000)
   }
 
   @afterCreate()
@@ -80,6 +80,7 @@ export default class Order extends BaseModel {
 
   @afterSave()
   public static async deliveryTunnel(order: Order) {
+    console.log(order.previousStatus, order.status)
     if (order.previousStatus !== order.status && order.status === OrdersStatus.PAID) {
       Rabbit.assertQueue('delivery.create')
       Rabbit.sendToQueue(
