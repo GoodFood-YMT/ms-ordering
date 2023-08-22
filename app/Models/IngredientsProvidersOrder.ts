@@ -9,9 +9,6 @@ export default class IngredientsProvidersOrder extends BaseModel {
   public quantity: number
 
   @column()
-  public providerId: string
-
-  @column()
   public orderId: string
 
   @column()
