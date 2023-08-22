@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 
 export default class ProvidersApi {
-  public static ENDPOINT = 'http://ms-providers.goodfood.svc.cluster.local/providers'
+  public static ENDPOINT = 'http://ms-providers.goodfood.svc.cluster.local:3333/providers'
 
   public static async getProvider(
     providerId: string,
