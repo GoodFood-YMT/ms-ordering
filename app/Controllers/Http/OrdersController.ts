@@ -134,12 +134,37 @@ export default class OrdersController {
     const order = await Order.findOrFail(params.id)
     await order.load('products')
 
+    const products: {
+      product_id: string
+      quantity: number
+      price: number
+      label: string
+    }[] = []
+
+    for (const product of order.products) {
+      const productData = await CatalogApi.getProduct(product.productId)
+
+      if (!productData) {
+        continue
+      }
+
+      products.push({
+        product_id: product.productId,
+        quantity: product.quantity,
+        price: productData.price,
+        label: productData.label,
+      })
+    }
+
     if (
       order.userId === userId ||
       role === 'admin' ||
       ((role === 'manager' || role === 'deliverer') && restaurantId === order.restaurantId)
     ) {
-      return response.status(200).json(order)
+      return response.status(200).json({
+        ...order.toJSON(),
+        products: products,
+      })
     }
 
     return response.status(401).json({ message: 'Unauthorized' })

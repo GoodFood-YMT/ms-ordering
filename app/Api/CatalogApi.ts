@@ -4,6 +4,7 @@ export default class CatalogApi {
   public static ENDPOINT = 'http://ms-catalog.goodfood.svc.cluster.local/catalog'
 
   public static async getProduct(id: string): Promise<{
+    label: string
     price: number
     restaurantId: string
     quantity: number
@@ -11,7 +12,12 @@ export default class CatalogApi {
     const response = await fetch(`${this.ENDPOINT}/products/${id}`)
 
     if (response.ok) {
-      return response.json() as Promise<{ price: number; restaurantId: string; quantity: number }>
+      return response.json() as Promise<{
+        label: string
+        price: number
+        restaurantId: string
+        quantity: number
+      }>
     }
 
     return null
