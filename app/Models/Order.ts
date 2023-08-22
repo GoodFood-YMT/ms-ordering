@@ -79,7 +79,7 @@ export default class Order extends BaseModel {
   }
 
   @afterSave()
-  public static async deliveryTunnel(order: Order) {
+  public static async afterPaid(order: Order) {
     if (order.previousStatus !== order.status && order.status === OrdersStatus.PAID) {
       await Rabbit.assertQueue('delivery.create')
       await Rabbit.sendToQueue(
@@ -90,6 +90,19 @@ export default class Order extends BaseModel {
           restaurantId: order.restaurantId,
         })
       )
+
+      await Rabbit.assertQueue('catalog.products.sold')
+      await order.load('products')
+      for (const product of order.products) {
+        await Rabbit.sendToQueue(
+          'catalog.products.sold',
+          JSON.stringify({
+            restaurandId: order.restaurantId,
+            productId: product.productId,
+            quantity: product.quantity,
+          })
+        )
+      }
 
       order.previousStatus = order.status
       order.save()
