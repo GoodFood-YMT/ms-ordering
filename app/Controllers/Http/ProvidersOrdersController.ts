@@ -50,7 +50,9 @@ export default class ProvidersOrdersController {
 
     const order = await ProvidersOrders.create({
       restaurantId,
+      previousStatus: ProviderOrdersStatus.PENDING,
       status: ProviderOrdersStatus.PENDING,
+      providerId: data.providerId,
     })
 
     for (const ingredient of data.ingredients) {
