@@ -7,9 +7,14 @@ export default class CatalogApi {
     price: number
     restaurantId: string
     quantity: number
-  }> {
+  } | null> {
     const response = await fetch(`${this.ENDPOINT}/products/${id}`)
-    return response.json() as Promise<{ price: number; restaurantId: string; quantity: number }>
+
+    if (response.ok) {
+      return response.json() as Promise<{ price: number; restaurantId: string; quantity: number }>
+    }
+
+    return null
   }
 
   public static async getIngredient(

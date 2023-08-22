@@ -69,6 +69,10 @@ export default class OrdersController {
     for (const product of data.products) {
       const productData = await CatalogApi.getProduct(product.productId)
 
+      if (!productData) {
+        return response.status(400).json({ message: 'Product not found' })
+      }
+
       // check if product in stock
       if (productData.quantity < product.quantity) {
         return response.status(400).json({ message: 'Product out of stock' })
