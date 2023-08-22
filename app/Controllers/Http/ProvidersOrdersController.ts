@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CatalogApi from 'App/Api/CatalogApi'
+import ProvidersApi from 'App/Api/ProvidersApi'
 import { ProviderOrdersStatus } from 'App/Enums/ProviderOrdersStatus'
 import ProvidersOrders from 'App/Models/ProvidersOrders'
 import ProvidersOrdersValidator from 'App/Validators/ProvidersOrdersValidator'
@@ -30,8 +31,21 @@ export default class ProvidersOrdersController {
 
     const data = await request.validate(ProvidersOrdersValidator)
 
+    const providerData = await ProvidersApi.getProvider(data.providerId, restaurantId)
+    if (!providerData) {
+      return response.status(400).json({ message: 'Provider not found' })
+    }
+
     if (data.ingredients.length === 0) {
       return response.status(400).json({ message: 'You must have at least one ingredient' })
+    }
+
+    for (const ingredient of data.ingredients) {
+      const ingredientData = await CatalogApi.getIngredient(restaurantId, ingredient.ingredientId)
+
+      if (!ingredientData) {
+        return response.status(400).json({ message: 'Ingredient not found' })
+      }
     }
 
     const order = await ProvidersOrders.create({
@@ -67,6 +81,11 @@ export default class ProvidersOrdersController {
     await order.load('ingredients')
     for (const ingredient of order.ingredients) {
       const ingredientData = await CatalogApi.getIngredient(restaurantId, ingredient.ingredientId)
+
+      if (!ingredientData) {
+        continue
+      }
+
       ingredients.push({
         ingredientId: ingredient.ingredientId,
         quantity: ingredient.quantity,
