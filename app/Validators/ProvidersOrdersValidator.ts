@@ -8,7 +8,7 @@ export default class ProvidersOrdersValidator {
     ingredients: schema.array().members(
       schema.object().members({
         ingredientId: schema.string(),
-        quantity: schema.number([rules.minLength(1)]),
+        quantity: schema.number([rules.range(1, 100)]),
       })
     ),
   })

@@ -9,7 +9,7 @@ export default class OrdersValidator {
     products: schema.array().members(
       schema.object().members({
         productId: schema.string(),
-        quantity: schema.number([rules.minLength(1)]),
+        quantity: schema.number([rules.range(1, 100)]),
       })
     ),
   })
