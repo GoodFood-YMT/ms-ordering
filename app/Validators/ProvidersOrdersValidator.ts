@@ -1,4 +1,4 @@
-import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
+import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ProvidersOrdersValidator {
@@ -8,7 +8,7 @@ export default class ProvidersOrdersValidator {
     ingredients: schema.array().members(
       schema.object().members({
         ingredientId: schema.string(),
-        quantity: schema.number(),
+        quantity: schema.number([rules.minLength(1)]),
       })
     ),
   })
