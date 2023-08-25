@@ -63,7 +63,7 @@ export default class ProvidersOrders extends BaseModel {
         await Rabbit.sendToQueue(
           'catalog.ingredients.stock',
           JSON.stringify({
-            restaurandId: order.restaurantId,
+            restaurantId: order.restaurantId,
             ingredientId: ingredient.ingredientId,
             add: ingredient.quantity,
           })

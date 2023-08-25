@@ -97,7 +97,7 @@ export default class Order extends BaseModel {
         await Rabbit.sendToQueue(
           'catalog.products.sold',
           JSON.stringify({
-            restaurandId: order.restaurantId,
+            restaurantId: order.restaurantId,
             productId: product.productId,
             quantity: product.quantity,
           })
