@@ -81,6 +81,7 @@ export default class Order extends BaseModel {
   @afterSave()
   public static async afterPaid(order: Order) {
     if (order.previousStatus !== order.status && order.status === OrdersStatus.PAID) {
+      console.log('Order paid', order.status, order.previousStatus)
       await Rabbit.assertQueue('delivery.create')
       await Rabbit.sendToQueue(
         'delivery.create',
