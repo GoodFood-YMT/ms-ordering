@@ -14,7 +14,7 @@ export default class OrdersController {
     }
 
     const page = request.input('page', 1)
-    const limit = 10
+    const limit = request.input('limit', 10)
 
     const order = await Order.query()
       .where('user_id', userId)
@@ -36,7 +36,7 @@ export default class OrdersController {
     }
 
     const page = request.input('page', 1)
-    const limit = 10
+    const limit = request.input('limit', 10)
 
     const order = await Order.query()
       .where('restaurant_id', restaurantId)
