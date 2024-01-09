@@ -3,7 +3,6 @@ import {
   BaseModel,
   HasMany,
   afterCreate,
-  afterSave,
   beforeCreate,
   column,
   hasMany,
