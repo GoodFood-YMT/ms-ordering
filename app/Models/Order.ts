@@ -3,7 +3,6 @@ import {
   BaseModel,
   HasMany,
   afterCreate,
-  afterSave,
   beforeCreate,
   column,
   hasMany,
@@ -57,32 +56,10 @@ export default class Order extends BaseModel {
 
   @afterCreate()
   public static async paymentTunnel(order: Order) {
-    setTimeout(() => {
-      order.previousStatus = order.status
+    setTimeout(async () => {
       order.status = OrdersStatus.PAID
       order.save()
-    }, 10000)
-  }
 
-  @afterCreate()
-  public static async publishMarketing(order: Order) {
-    await Rabbit.assertQueue('marketing.order.created')
-    await Rabbit.sendToQueue(
-      'marketing.order.created',
-      JSON.stringify({
-        orderId: order.id,
-        totalPrice: order.totalPrice,
-        userId: order.userId,
-        restaurantId: order.restaurantId,
-        createdAt: order.createdAt,
-      })
-    )
-  }
-
-  @afterSave()
-  public static async afterPaid(order: Order) {
-    if (order.previousStatus !== order.status && order.status === OrdersStatus.PAID) {
-      console.log('Order paid', order.status, order.previousStatus)
       await Rabbit.assertQueue('delivery.create')
       await Rabbit.sendToQueue(
         'delivery.create',
@@ -105,6 +82,21 @@ export default class Order extends BaseModel {
           })
         )
       }
-    }
+    }, 10000)
+  }
+
+  @afterCreate()
+  public static async publishMarketing(order: Order) {
+    await Rabbit.assertQueue('marketing.order.created')
+    await Rabbit.sendToQueue(
+      'marketing.order.created',
+      JSON.stringify({
+        orderId: order.id,
+        totalPrice: order.totalPrice,
+        userId: order.userId,
+        restaurantId: order.restaurantId,
+        createdAt: order.createdAt,
+      })
+    )
   }
 }

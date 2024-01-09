@@ -48,16 +48,10 @@ export default class ProvidersOrders extends BaseModel {
 
   @afterCreate()
   public static async paymentTunnel(order: ProvidersOrders) {
-    setTimeout(() => {
-      order.previousStatus = order.status
+    setTimeout(async () => {
       order.status = ProviderOrdersStatus.DELIVERED
       order.save()
-    }, 10000)
-  }
 
-  @afterSave()
-  public static async afterDelivered(order: ProvidersOrders) {
-    if (order.previousStatus !== order.status && order.status === ProviderOrdersStatus.DELIVERED) {
       await Rabbit.assertQueue('catalog.ingredients.stock')
       await order.load('ingredients')
       for (const ingredient of order.ingredients) {
@@ -70,6 +64,6 @@ export default class ProvidersOrders extends BaseModel {
           })
         )
       }
-    }
+    }, 10000)
   }
 }
