@@ -105,8 +105,10 @@ export default class Order extends BaseModel {
         )
       }
 
-      order.previousStatus = order.status
-      order.save()
+      setTimeout(() => {
+        order.previousStatus = order.status
+        order.save()
+      }, 1000)
     }
   }
 }
