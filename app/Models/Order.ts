@@ -58,6 +58,7 @@ export default class Order extends BaseModel {
   @afterCreate()
   public static async paymentTunnel(order: Order) {
     setTimeout(() => {
+      order.previousStatus = order.status
       order.status = OrdersStatus.PAID
       order.save()
     }, 10000)
@@ -104,11 +105,6 @@ export default class Order extends BaseModel {
           })
         )
       }
-
-      setTimeout(() => {
-        order.previousStatus = order.status
-        order.save()
-      }, 1000)
     }
   }
 }
